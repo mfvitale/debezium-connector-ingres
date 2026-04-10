@@ -153,9 +153,9 @@ public abstract class AbstractIngresDefaultValueIT extends AbstractAsyncEngineCo
     @Test
     @FixFor("DBZ-4990")
     public void shouldHandleCharacterDefaultTypes() throws Exception {
-    	//Ingres only allows 1 column altered at a time
-    	//and only 1 default value altered w/o using command line tools
-    	//So this test is modified to only alter the first column's default value
+        // Ingres only allows 1 column altered at a time
+        // and only 1 default value altered w/o using command line tools
+        // So this test is modified to only alter the first column's default value
         List<ColumnDefinition> columnDefinitions = Arrays.asList(
                 new ColumnDefinition("val_char", "char(5)",
                         "'YES'", "'NO'",
@@ -352,12 +352,12 @@ public abstract class AbstractIngresDefaultValueIT extends AbstractAsyncEngineCo
      */
     private void testDefaultValuesAlterTableModifyExisting(List<ColumnDefinition> columnDefinitions) throws Exception {
         // Build SQL
-        //Ingres only supports 1 altering of DEFAULT values on a table column so we just alter the first column
+        // Ingres only supports 1 altering of DEFAULT values on a table column so we just alter the first column
         for (ColumnDefinition column : columnDefinitions) {
-        	StringBuilder alterSql = null;
-        	alterSql = new StringBuilder("ALTER TABLE %table% ALTER ")
-            	.append(column.name).append(' ').append(column.definition)
-                .append(" DEFAULT ").append(column.modifyDefaultValue);
+            StringBuilder alterSql = null;
+            alterSql = new StringBuilder("ALTER TABLE %table% ALTER ")
+                    .append(column.name).append(' ').append(column.definition)
+                    .append(" DEFAULT ").append(column.modifyDefaultValue);
             performSchemaChange(config, connection, alterSql.toString());
             break;
         }
@@ -416,11 +416,11 @@ public abstract class AbstractIngresDefaultValueIT extends AbstractAsyncEngineCo
      */
     private void testDefaultValuesAlterTableAdd(List<ColumnDefinition> columnDefinitions) throws Exception {
         // Build SQL
-       // Ingres only supports adding 1 column at a time, so multiple alters are needed here
+        // Ingres only supports adding 1 column at a time, so multiple alters are needed here
         Iterator<ColumnDefinition> iterator = columnDefinitions.iterator();
         while (iterator.hasNext()) {
-        	StringBuilder alterSql = new StringBuilder();
-        	alterSql = new StringBuilder("ALTER TABLE %table% ");
+            StringBuilder alterSql = new StringBuilder();
+            alterSql = new StringBuilder("ALTER TABLE %table% ");
             final ColumnDefinition column = iterator.next();
             alterSql.append("ADD ")
                     .append("a").append(column.name)
@@ -432,23 +432,23 @@ public abstract class AbstractIngresDefaultValueIT extends AbstractAsyncEngineCo
                     .append("a").append(column.name).append("_null")
                     .append(" ").append(column.definition)
                     .append(" ").append("DEFAULT NULL ");
-			performSchemaChange(config, connection, alterSql.toString());
+            performSchemaChange(config, connection, alterSql.toString());
             if (column.temporalType) {
                 final String currentDefaultValue = column.getCurrentRegister();
                 alterSql.append(" ADD ")
                         .append("a").append(column.name).append("_current")
                         .append(" ").append(column.definition)
                         .append(" ").append("DEFAULT ").append(currentDefaultValue);
-				performSchemaChange(config, connection, alterSql.toString());
+                performSchemaChange(config, connection, alterSql.toString());
                 alterSql = new StringBuilder("ALTER TABLE %table% ");
                 alterSql.append(" ADD ")
                         .append("a").append(column.name).append("_current_nonnull")
                         .append(" ").append(column.definition)
                         .append(" ").append("DEFAULT ").append(currentDefaultValue).append(" NOT NULL ");
-				performSchemaChange(config, connection, alterSql.toString());
+                performSchemaChange(config, connection, alterSql.toString());
             }
         }
-        
+
         waitForAvailableRecords(waitTimeForRecords(), TimeUnit.SECONDS);
 
         connection.execute("INSERT INTO dv_test (id) values (3)");

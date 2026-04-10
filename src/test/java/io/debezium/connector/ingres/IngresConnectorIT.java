@@ -233,7 +233,7 @@ public class IngresConnectorIT extends AbstractAsyncEngineConnectorTest {
         consumeRecordsByTopic(RECORDS_PER_TABLE);
 
         connection.execute("truncate table truncate_table");
-        
+
         SourceRecords sourceRecords = consumeRecordsByTopic(1);
         List<SourceRecord> truncateTable = sourceRecords.recordsForTopic(TestHelper.topicName("truncate_table"));
         assertThat(truncateTable).isNotNull().hasSize(1);
@@ -973,7 +973,7 @@ public class IngresConnectorIT extends AbstractAsyncEngineConnectorTest {
                 .with(IngresConnectorConfig.SNAPSHOT_MODE, SnapshotMode.NO_DATA)
                 .with("column.mask.with.12.chars", TestHelper.getDBPrefix() + "masked_hashed_column_table.name")
                 .with("column.mask.hash.SHA-256.with.salt.CzQMA0cB5K",
-                		TestHelper.getDBPrefix() + "masked_hashed_column_table.name2," + TestHelper.getDBPrefix() + "masked_hashed_column_table.name3")
+                        TestHelper.getDBPrefix() + "masked_hashed_column_table.name2," + TestHelper.getDBPrefix() + "masked_hashed_column_table.name3")
                 .with("column.truncate.to.4.chars", TestHelper.getDBPrefix() + "truncated_column_table.name")
                 .build();
 
